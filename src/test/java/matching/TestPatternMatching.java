@@ -27,6 +27,7 @@ public class TestPatternMatching extends TestCase
 		return node;
 	}
 	
+	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -34,6 +35,7 @@ public class TestPatternMatching extends TestCase
 		tx = Transaction.begin();
 	}
 
+	@Override
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
@@ -274,9 +276,9 @@ public class TestPatternMatching extends TestCase
 		b3.createRelationshipTo( c, R );
 		
 		PatternNode pA = new PatternNode();
-		pA.setPropertyExistConstraint( "hasProperty" );
+		pA.addPropertyExistConstraint( "hasProperty" );
 		PatternNode pB = new PatternNode();
-		pB.setPropertyEqualConstraint( "equals", 1 );
+		pB.addPropertyEqualConstraint( "equals", 1 );
 		PatternNode pC = new PatternNode();
 		
 		pA.createRelationshipTo( pB, R );

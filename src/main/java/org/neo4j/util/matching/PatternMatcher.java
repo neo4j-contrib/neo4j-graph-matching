@@ -195,18 +195,10 @@ public class PatternMatcher
 		{
 			PatternNode pNode = currentPos.getPatternNode();
 			Node currentNode = currentPos.getCurrentNode();
-			if ( pNode.getPropertyName() != null ) 
+			
+			if ( !checkProperties( pNode, currentNode ) )
 			{
-				if ( !currentNode.hasProperty( pNode.getPropertyName() ) )
-				{
-					return false;
-				}
-				if ( pNode.getPropertyValue() != null && 
-					!pNode.getPropertyValue().equals( currentNode.getProperty( 
-						pNode.getPropertyName() ) ) )
-				{
-					return false;
-				}
+				return false;
 			}
 				
 			if ( pushElement )
@@ -274,6 +266,30 @@ public class PatternMatcher
 				uncompletedPositions.push( digPos );
 				return matchFound;
 			}
+			return true;
+		}
+
+		private boolean checkProperties(
+			PatternNode patternNode, Node neoNode )
+		{
+			for ( String propertyName : patternNode.getPropertiesExist() )
+			{
+				if ( !neoNode.hasProperty( propertyName ) )
+				{
+					return false;
+				}
+			}
+			
+			for ( String propertyName : patternNode.getPropertiesEqual() )
+			{
+				if ( !neoNode.hasProperty( propertyName ) ||
+					!patternNode.getPropertyValue( propertyName ).equals(
+					neoNode.getProperty( propertyName ) ) )
+				{
+					return false;
+				}
+			}
+			
 			return true;
 		}
 

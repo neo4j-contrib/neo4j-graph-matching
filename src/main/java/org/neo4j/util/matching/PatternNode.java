@@ -1,6 +1,10 @@
 package org.neo4j.util.matching;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 import org.neo4j.api.core.RelationshipType;
 
 public class PatternNode
@@ -8,8 +12,9 @@ public class PatternNode
 	 private LinkedList<PatternRelationship> relationships = 
 		new LinkedList<PatternRelationship>();
 	 
-	 private String propertyName = null;
-	 private Object propertyValue = null;
+	 private Set<String> propertiesExist = new HashSet<String>();
+	 private Map<String, Object> propertiesEqual =
+		 new HashMap<String, Object>();
 	 private String label;
 	
 	public PatternNode()
@@ -47,16 +52,14 @@ public class PatternNode
 		return relationship;
 	}
 	
-	public void setPropertyExistConstraint( String propertyName )
+	public void addPropertyExistConstraint( String propertyName )
 	{
-		this.propertyName = propertyName;
-		propertyValue = null;
+		this.propertiesExist.add( propertyName );
 	}
 	
-	public void setPropertyEqualConstraint( String propertyName, Object value )
+	public void addPropertyEqualConstraint( String propertyName, Object value )
 	{
-		this.propertyName = propertyName;
-		this.propertyValue = value;
+		this.propertiesEqual.put( propertyName, value );
 	}
 	
 	public String getLabel()
@@ -70,13 +73,18 @@ public class PatternNode
 		return this.label;
 	}
 	
-	String getPropertyName()
+	Set<String> getPropertiesExist()
 	{
-		return propertyName;
+		return this.propertiesExist;
 	}
 	
-	Object getPropertyValue()
+	Set<String> getPropertiesEqual()
 	{
-		return propertyValue;
+		return this.propertiesEqual.keySet();
+	}
+	
+	Object getPropertyValue( String propertyName )
+	{
+		return this.propertiesEqual.get( propertyName );
 	}
 }
