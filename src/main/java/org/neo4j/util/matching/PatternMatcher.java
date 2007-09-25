@@ -282,15 +282,30 @@ public class PatternMatcher
 			
 			for ( String propertyName : patternNode.getPropertiesEqual() )
 			{
-				if ( !neoNode.hasProperty( propertyName ) ||
-					!patternNode.getPropertyValue( propertyName ).equals(
-					neoNode.getProperty( propertyName ) ) )
+//				if ( !neoNode.hasProperty( propertyName ) ||
+//					!patternNode.getPropertyValue( propertyName ).equals(
+//					neoNode.getProperty( propertyName ) ) )
+				if ( !neoPropertyHasValue( neoNode, patternNode,
+					propertyName ) )
 				{
 					return false;
 				}
 			}
 			
 			return true;
+		}
+		
+		private boolean neoPropertyHasValue( Node neoNode,
+			PatternNode patternNode, String propertyName )
+		{
+			if ( !neoNode.hasProperty( propertyName ) )
+			{
+				return false;
+			}
+			Object patternValue = patternNode.getPropertyValue( propertyName );
+			Object neoValue = neoNode.getProperty( propertyName );
+			return NeoArrayPropertyUtil.neoValueToCollection(
+				neoValue ).contains( patternValue );
 		}
 
 // old implementation that doesn't return values

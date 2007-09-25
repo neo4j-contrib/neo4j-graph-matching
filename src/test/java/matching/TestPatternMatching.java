@@ -309,4 +309,60 @@ public class TestPatternMatching extends TestCase
 		}
 		assertEquals( 1, count );
 	}
+
+	public void testArrayPropertyValues()
+	{
+		Node a = createInstance( "A" );
+		a.setProperty( "hasProperty", true );
+		Node b1 = createInstance( "B1" );
+		b1.setProperty( "equals", new Integer[] { 19, 1 } );
+		Node b2 = createInstance( "B2" );
+		b2.setProperty( "equals", new Integer[] { 1, 10, 12 } );
+		Node b3 = createInstance( "B3" );
+		b3.setProperty( "equals", 2 );
+		Node c = createInstance( "C" );
+		
+		final RelationshipType R = MyRelTypes.R1;
+		
+		a.createRelationshipTo( b1, R );
+		a.createRelationshipTo( b2, R );
+		a.createRelationshipTo( b3, R );
+		b1.createRelationshipTo( c, R );
+		b2.createRelationshipTo( c, R );
+		b3.createRelationshipTo( c, R );
+		
+		PatternNode pA = new PatternNode();
+		pA.addPropertyExistConstraint( "hasProperty" );
+		PatternNode pB = new PatternNode();
+		pB.addPropertyEqualConstraint( "equals", 1 );
+		PatternNode pC = new PatternNode();
+		
+		pA.createRelationshipTo( pB, R );
+		pB.createRelationshipTo( pC, R );
+		
+		int count = 0;
+		for ( PatternMatch match : 
+			PatternMatcher.getMatcher().match( pA, a ) )
+		{
+			assertEquals( match.getNodeFor( pA ), a );
+			Node b = match.getNodeFor( pB );
+			if ( !b.equals( b1 ) && !b.equals( b2 ) )
+			{
+				fail( "either b1 or b2" );
+			}
+			assertEquals( match.getNodeFor( pC ), c );
+			count++;
+		}
+		assertEquals( 2, count );
+		count = 0;
+		for ( PatternMatch match : 
+			PatternMatcher.getMatcher().match( pB, b2 ) )
+		{
+			assertEquals( match.getNodeFor( pA ), a );
+			assertEquals( match.getNodeFor( pB ), b2 );
+			assertEquals( match.getNodeFor( pC ), c );
+			count++;
+		}
+		assertEquals( 1, count );
+	}
 }
