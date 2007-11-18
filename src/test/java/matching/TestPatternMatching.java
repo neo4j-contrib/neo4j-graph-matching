@@ -31,7 +31,7 @@ public class TestPatternMatching extends TestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		neo = new EmbeddedNeo(MyRelTypes.class, "var/neo", true);
+		neo = new EmbeddedNeo(MyRelTypes.class, "var/neo");
 		tx = Transaction.begin();
 	}
 
