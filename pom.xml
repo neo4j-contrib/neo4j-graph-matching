@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.neo4j</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>7-SNAPSHOT</version>
+    <version>9-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -18,6 +18,17 @@
   <name>Neo4j - Graph Matching</name>
   <description>A graph pattern matcher for Neo4j.</description>
   <url>http://components.neo4j.org/${project.artifactId}/${project.version}</url>
+
+<repositories>
+ <repository>
+                  <id>neo4j-public-repository</id>
+                  <name>Publically available Maven 2 repository for Neo4j</name>
+                  <url>http://m2.neo4j.org</url>
+                  <snapshots>
+                    <enabled>true</enabled>
+                  </snapshots>
+                </repository>
+              </repositories>
 
   <scm>
     <connection>
